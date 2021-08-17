@@ -25,7 +25,7 @@ class UserRegisterRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:App\Models\User,email_address',
+            'email' => 'required|email|unique:App\Models\User,email',
             'username' => 'required|string|unique:App\Models\User,username|max:255',
             'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             'confirmPassword' => 'required|same:password'
