@@ -3,8 +3,12 @@
 use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+<<<<<<< HEAD
 use App\Http\Controllers\RegisterController;
 
+=======
+use App\Http\Controllers\FileUploadController;
+>>>>>>> file-upload
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +20,7 @@ use App\Http\Controllers\RegisterController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('file-upload', [FileUploadController::class, 'fileUpload']);
 
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
