@@ -1,14 +1,11 @@
 <?php
 
-use App\Http\Controllers\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
+use App\Http\Controllers\BookController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
-
-=======
 use App\Http\Controllers\FileUploadController;
->>>>>>> file-upload
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +18,10 @@ use App\Http\Controllers\FileUploadController;
 |
 */
 Route::post('file-upload', [FileUploadController::class, 'fileUpload']);
-
 Route::post('/register', [RegisterController::class, 'register']);
 Route::post('/login', [LoginController::class, 'login']);
+Route::apiResource('books', BookController::class);
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
