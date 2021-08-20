@@ -15,6 +15,15 @@ class BookController extends Controller
         request()->headers->set('Accept', 'application/json');
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function index()
+    {
+        return BookResource::collection(Book::all());
+    }
 
     /**
      * Store a newly created resource in storage.
