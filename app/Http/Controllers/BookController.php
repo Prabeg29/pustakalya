@@ -64,5 +64,16 @@ class BookController extends Controller
     }
 
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return BookResource
+     */
+    public function show($id)
+    {
+        return new BookResource(Book::where('id', '=', $id)->firstOrFail());
+    }
+
 
 }
