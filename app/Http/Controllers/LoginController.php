@@ -5,24 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UserLoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
     public function login(UserLoginRequest $request)
     {
-        $validatedLoginData = $request->validated();
-        $user = User::firstWhere('username', $validatedLoginData['username']);
-        if(!$user || !Hash::check($validatedLoginData['password'], $user->password)) {
+        $user = User::firstWhere('username', $request->username);
+        if(!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 "status" => "Failed",
                 "message" => "Invalid credentials"
             ], 401);
         }
+        $token = $user->createToken('auth_token')->plainTextToken;
         return response()->json([
             "status" => "Success",
             "message" => "Successful Login",
-            "token" => $user->tokens[0]->token
+            "tokenType" => "Bearer",
+            "accessToken" => $token
         ], 200);
 
     }

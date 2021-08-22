@@ -17,12 +17,13 @@ use App\Http\Controllers\FileUploadController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('file-upload', [FileUploadController::class, 'fileUpload']);
-Route::post('/register', [RegisterController::class, 'register']);
-Route::post('/login', [LoginController::class, 'login']);
-Route::apiResource('books', BookController::class);
 
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('/v1')->group(function (){
+    Route::post('/register', [RegisterController::class, 'register']);
+    Route::post('/login', [LoginController::class, 'login']);
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::post('/file-upload', [FileUploadController::class, 'fileUpload']);
+        Route::apiResource('books', BookController::class);
+    });
 });
+
