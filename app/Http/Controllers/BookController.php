@@ -7,6 +7,9 @@ use App\Models\Genre;
 use App\Models\Author;
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class BookController extends Controller
 {
@@ -18,18 +21,19 @@ class BookController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @param $request
+     * @return AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        return BookResource::collection(Book::all());
+        return BookResource::collection(Book::paginate($request->limit));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return BookResource|\Illuminate\Http\Response
+     * @param Request $request
+     * @return BookResource|Response
      */
     public function store(BookRequest $request)
     {
@@ -77,7 +81,7 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      * @param  int  $id
      * @return BookResource
      */
@@ -121,7 +125,7 @@ class BookController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function destroy($id)
     {
