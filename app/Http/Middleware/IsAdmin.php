@@ -19,7 +19,7 @@ class IsAdmin
         if (auth()->user()->name !== "Prabeg Shakya") {
             return response()->json([
                 "status" => "Failed",
-                "admin" => "Only admin is allowed to perform the action"
+                "message" => "Only the admin is allowed to perform the action"
             ], 403);
         }
         return $next($request);
