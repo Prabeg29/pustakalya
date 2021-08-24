@@ -45,12 +45,16 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param User $user
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show($id)
+    public function show(User $user)
     {
-        //
+        $this->authorize('view', $user);
+        return response()->json([
+            "user" => $user
+        ], 200);
     }
 
     /**
