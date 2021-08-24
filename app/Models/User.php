@@ -11,6 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 /**
  * @method static create(array $array)
  * @method static firstWhere(string $string, $username)
+ * @method static paginate($limit)
  */
 class User extends Authenticatable
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
+        'is_admin'
     ];
 
     /**
