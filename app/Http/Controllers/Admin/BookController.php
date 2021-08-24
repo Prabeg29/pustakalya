@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Book;
-use App\Models\Genre;
-use App\Models\Author;
+use App\Actions\Book\StoreBookAction;
+use App\Actions\UpdateUserAction;
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
+use App\Models\Author;
+use App\Models\Book;
+use App\Models\Genre;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -35,89 +37,34 @@ class BookController extends Controller
      * @param Request $request
      * @return BookResource|Response
      */
-    public function store(BookRequest $request)
+    public function store(BookRequest $request, StoreBookAction $action)
     {
-        $validatedBookData = $request->validated();
-
-        $book = Book::create([
-            'title' => $validatedBookData['title'],
-            'description' => $validatedBookData['description'],
-            'cover_image' => $validatedBookData['coverImage'] ?? null,
-            'qty' => $validatedBookData['qty']
-        ]);
-
-        $authorNames = explode(",", $validatedBookData["authors"]);
-        $authorIds = [];
-        foreach ($authorNames as $authorName)
-        {
-            $author = Author::firstOrCreate(["name" => $authorName]);
-            $authorIds[] = $author->id;
-        }
-        $book->authors()->sync($authorIds);
-
-        $genreNames = explode(",", $validatedBookData["genres"]);
-        $genreIds = [];
-        foreach ($genreNames as $genreName)
-        {
-            $genre = Genre::firstOrCreate(["name" => $genreName]);
-            $genreIds[] = $genre->id;
-        }
-        $book->genres()->sync($genreIds);
-
+        $book = $action->handle($request);
         return new BookResource($book);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param Book $book
      * @return BookResource
      */
-    public function show($id)
+    public function show(Book $book)
     {
-        return new BookResource(Book::where('id', '=', $id)->firstOrFail());
+        return new BookResource($book);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param  int  $id
+     * @param BookRequest $request
+     * @param UpdateUserAction $action
+     * @param Book $book
      * @return BookResource
      */
-    public function update(BookRequest $request, $id)
+    public function update(BookRequest $request, UpdateUserAction $action, Book $book)
     {
-        $validatedBookData = $request->validated();
-
-         Book::where('id', '=', $id)
-            ->firstOrFail()
-            ->update([
-            'title' => $validatedBookData['title'],
-            'description' => $validatedBookData['description'],
-            'cover_image' => $validatedBookData['coverImage'] ?? null,
-            'qty' => $validatedBookData['qty']
-        ]);
-
-        $book = Book::where('id', '=', $id)->firstOrFail();
-
-        $authorNames = explode(",", $validatedBookData["authors"]);
-        $authorIds = [];
-        foreach ($authorNames as $authorName)
-        {
-            $author = Author::firstOrCreate(["name" => $authorName]);
-            $authorIds[] = $author->id;
-        }
-        $book->authors()->sync($authorIds);
-
-        $genreNames = explode(",", $validatedBookData["genres"]);
-        $genreIds = [];
-        foreach ($genreNames as $genreName)
-        {
-            $genre = Genre::firstOrCreate(["name" => $genreName]);
-            $genreIds[] = $genre->id;
-        }
-        $book->genres()->sync($genreIds);
-
+        $book = $action->handle($request, $book);
         return new BookResource($book);
     }
 
@@ -127,9 +74,8 @@ class BookController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function destroy($id)
+    public function destroy(Book $book)
     {
-        $book = Book::where('id', '=', $id)->firstOrFail();
         $book->delete();
         return response()->json([
             "status" => "Success",

@@ -3,7 +3,6 @@
 
 namespace App\Actions;
 
-
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
