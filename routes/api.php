@@ -19,6 +19,7 @@ use App\Http\Controllers\FileUploadController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::prefix('/v1')->group(function (){
     Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/login', [LoginController::class, 'login']);

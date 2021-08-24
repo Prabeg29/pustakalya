@@ -10,15 +10,20 @@ use Illuminate\Support\Facades\Hash;
 
 class StoreUserAction
 {
+    private $user;
+
+    /**
+     * @param UserRegisterRequest $request
+     * @return mixed
+     */
     public function execute(UserRegisterRequest $request)
     {
-        $user = User::create([
+        $this->user = User::create([
             "name" => $request->name,
             "email" => $request->email,
             "username" => $request->username,
             "password" => Hash::make($request->password),
         ]);
-        $token = $user->createToken('newUserRegistration')->plainTokenText;
-        return array("user" => $user, "token" => $token);
+        return $this->user;
     }
 }

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Actions\StoreUserAction;
+use App\Actions\UpdateUserAction;
+use App\Http\Requests\UserProfileRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -18,15 +21,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function index(Request $request)
     {
         $this->authorize('viewAny', User::class);
-        return response()->json([
-            User::paginate($request->limit)
-        ], 200);
+        return UserResource::collection(User::paginate($request->limit));
     }
 
     /**
@@ -36,9 +37,9 @@ class UserController extends Controller
      * @param StoreUserAction $storeUserAction
      * @return UserResource
      */
-    public function store(UserRegisterRequest $request, StoreUserAction $storeUserAction)
+    public function store(UserRegisterRequest $request, StoreUserAction $action)
     {
-        $user = $storeUserAction->execute($request);
+        $user = $action->execute($request);
         return new UserResource($user);
     }
 
@@ -46,27 +47,30 @@ class UserController extends Controller
      * Display the specified resource.
      *
      * @param User $user
-     * @return \Illuminate\Http\JsonResponse
+     * @return UserResource
      * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(User $user)
     {
         $this->authorize('view', $user);
-        return response()->json([
-            "user" => $user
-        ], 200);
+        return new UserResource($user);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param UserProfileRequest $request
+     * @param UpdateUserAction $action
+     * @param User $user
+     * @return UserResource
      */
-    public function update(Request $request, $id)
+    public function update(UserProfileRequest $request, UpdateUserAction $action, User $user)
     {
-        //
+       if(!Gate::allows('set-admin', $user) && $request->isAdmin){
+            $request->isAdmin = false;
+        }
+        $user = $action->handle($request, $user);
+        return new UserResource($user);
     }
 
     /**
