@@ -22,26 +22,26 @@ Please make sure to update tests as appropriate.
 ### API TASK 
 
 # Auth
-- [] User Registration
-- [] login via username and password (Sanctum Auth)
+- [X] User Registration
+- [X] login via username and password (Sanctum Auth)
 - [] logout
 
 # List books
-- [] the book has a title with author, cover, and genre
-- [] the book can have multiple authors and genres
-- [] paginate the results
+- [X] the book has a title with author, cover, and genre
+- [X] the book can have multiple authors and genres
+- [X] paginate the results
 - [] Search for a book by title/author/genre
 
 # List Individual Book
 - [] must have description, user reviews and rating
 
 # Admin account
-- [] CRUD operation for books with middleware
-- [] CRUD operation for users
+- [X] CRUD operation for books with middleware
+- [X] CRUD operation for users
 
 # User Account
-- [] Edit user profile
-- [] Upload avatar
+- [X] Edit user profile
+- [X] Upload avatar
 - [] Change the password
 - [] Review on a book (stars + comments)
 - [] Add book to profile
