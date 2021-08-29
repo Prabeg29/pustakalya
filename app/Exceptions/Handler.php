@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -48,6 +49,13 @@ class Handler extends ExceptionHandler
                 return response()->json([
                     'message' => 'Unauthorized.'
                 ], 403);
+            }
+        });
+        $this->renderable(function (QueryException $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Bad Request.'
+                ], 400);
             }
         });
     }

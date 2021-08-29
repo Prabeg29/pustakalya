@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Closure;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * @method static create(array $array)
- * @method static chunk(int $int, \Closure $param)
+ * @method static chunk(int $int, Closure $param)
  * @method static where(string $string, string $string1, int $id)
  * @method static paginate()
  */
@@ -26,7 +29,7 @@ class Book extends Model
     ];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function authors()
     {
@@ -34,11 +37,24 @@ class Book extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function genres()
     {
         return $this->belongsToMany(Genre::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function users()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     /**

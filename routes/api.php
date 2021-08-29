@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserBookController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::prefix('/v1')->group(function (){
         Route::post('/file-upload', [FileUploadController::class, 'fileUpload']);
         Route::apiResource('users', UserController::class);
         Route::apiResource('books', BookController::class)->middleware(IsAdmin::class);
+        Route::apiResource('users.books', UserBookController::class);
     });
 });
 
