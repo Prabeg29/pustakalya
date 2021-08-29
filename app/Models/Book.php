@@ -45,11 +45,11 @@ class Book extends Model
     }
 
     /**
-     * @return BelongsTo
+     * @return BelongsToMany
      */
     public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function reviews()

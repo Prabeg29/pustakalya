@@ -40,21 +40,21 @@ class Handler extends ExceptionHandler
         $this->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => 'Record not found.'
+                    'message' => $e->getMessage()
                 ], 404);
             }
         });
         $this->renderable(function (AccessDeniedHttpException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => 'Unauthorized.'
+                    'message' => $e->getMessage()
                 ], 403);
             }
         });
         $this->renderable(function (QueryException $e, $request) {
             if ($request->is('api/*')) {
                 return response()->json([
-                    'message' => 'Bad Request.'
+                    'message' => $e->getMessage()
                 ], 400);
             }
         });

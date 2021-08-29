@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\UserBookController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\BookController;
+use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FileUploadController;
@@ -26,8 +27,8 @@ Route::prefix('/v1')->group(function (){
     Route::middleware('auth:sanctum')->group(function(){
         Route::post('/file-upload', [FileUploadController::class, 'fileUpload']);
         Route::apiResource('users', UserController::class);
-        Route::apiResource('books', BookController::class)->middleware(IsAdmin::class);
+        Route::apiResource('books', AdminBookController::class)->middleware(IsAdmin::class);
         Route::apiResource('users.books', UserBookController::class);
+        Route::apiResource('books.reviews', BookReviewController::class);
     });
 });
-
