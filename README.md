@@ -30,10 +30,10 @@ Please make sure to update tests as appropriate.
 - [X] the book has a title with author, cover, and genre
 - [X] the book can have multiple authors and genres
 - [X] paginate the results
-- [] Search for a book by title/author/genre
+- [X] Search for a book by title/author/genre
 
 # List Individual Book
-- [] must have description, user reviews and rating
+- [X] must have description, user reviews and rating
 
 # Admin account
 - [X] CRUD operation for books with middleware
@@ -43,6 +43,5 @@ Please make sure to update tests as appropriate.
 - [X] Edit user profile
 - [X] Upload avatar
 - [] Change the password
-- [] Review on a book (stars + comments)
-- [] Add book to profile
-- [] View books added under ones profile 
+- [X] Add book to profile
+- [X] View books added under ones profile 
