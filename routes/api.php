@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::prefix('/v1')->group(function (){
     Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/login', [LoginController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function(){
+        Route::post('/book-search', [SearchController::class, 'search']);
         Route::post('/file-upload', [FileUploadController::class, 'fileUpload']);
         Route::apiResource('users', UserController::class);
         Route::apiResource('books', BookController::class)->middleware(IsAdmin::class);
