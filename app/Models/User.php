@@ -13,7 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static firstWhere(string $string, $username)
  * @method static paginate($limit)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable, HasApiTokens;
 
@@ -27,7 +27,6 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
-        'is_admin'
     ];
 
     /**

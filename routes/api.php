@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\UserBookController;
 use App\Http\Controllers\SearchController;
@@ -7,8 +9,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BookController as AdminBookController;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\FileUploadController;
 
 /*

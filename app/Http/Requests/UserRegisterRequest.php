@@ -27,8 +27,33 @@ class UserRegisterRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:App\Models\User,email',
             'username' => 'required|string|unique:App\Models\User,username|max:255',
-            'password' => 'required|min:8|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
+            'password' => 'required|min:8|max:255|regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/',
             'confirmPassword' => 'required|same:password'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Please enter your name',
+            'name.max' => 'Please enter less than 255 characters',
+            'email.required' => 'Please enter your email',
+            'email.email' => 'Please enter a valid email',
+            'email.unique' => 'Please enter a different email. This email has already been taken',
+            'username.required' => 'Please enter a username',
+            'username.unique' => 'Please enter a different username. This username has already been taken',
+            'username.max' => 'Please enter less than 255 characters',
+            'password.required' => 'Please enter password',
+            'password.min' => 'Please enter at least 8 characters',
+            'password.max' => 'Please enter less than 255 characters',
+            'password.regex' => 'Password must consist of at least 1 uppercase, 1 lowercase, 1 number, and 1 special character',
+            'confirmPassword.required' => 'Please enter password again for confirmation',
+            'confirmPassword.same' => 'Passwords do not match',
         ];
     }
 }
