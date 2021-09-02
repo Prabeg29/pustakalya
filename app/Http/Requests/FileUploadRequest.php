@@ -28,4 +28,20 @@ class FileUploadRequest extends FormRequest
             'file' => 'required|image|max:1024'
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'name.required' => 'Please enter filename',
+            'name.max' => 'Please enter less than 255 characters',
+            'file.required' => 'Please select a file',
+            'file.image' => 'File must be an image',
+            'file.max' => 'Please select a file with max size of 1 MB',
+        ];
+    }
 }
