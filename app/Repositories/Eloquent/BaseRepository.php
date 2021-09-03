@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\EloquentRepositoryInterface;
 
-class BaseRepository implements EloquentRepositoryInterface
+abstract class BaseRepository implements EloquentRepositoryInterface
 {
     protected $model;
 
@@ -23,6 +23,14 @@ class BaseRepository implements EloquentRepositoryInterface
     {
         $model = $this->model->create($payload);
         return $model->fresh();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function firstOrCreate(array $payload): ?Model
+    {
+        return $this->model->firstOrCreate($payload);
     }
 
     /**
@@ -44,10 +52,12 @@ class BaseRepository implements EloquentRepositoryInterface
     /**
      * @inheritDoc
      */
-    public function update(int $modelId, array $payload): bool
+    public function update(int $modelId, array $payload): ?Model
     {
-        $model = $this->model->findById($modelId);
-        return $model->update($payload);
+        $model = $this->findById($modelId);
+        $model->update($payload);
+
+        return $model;
     }
 
     /**
@@ -55,6 +65,6 @@ class BaseRepository implements EloquentRepositoryInterface
      */
     public function delete(int $modelId): bool
     {
-        return $this->model->findById($modelId)->delete();
+        return $this->findById($modelId)->delete();
     }
 }

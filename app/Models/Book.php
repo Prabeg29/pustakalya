@@ -2,18 +2,10 @@
 
 namespace App\Models;
 
-use Closure;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-/**
- * @method static create(array $array)
- * @method static chunk(int $int, Closure $param)
- * @method static where(string $string, string $string1, int $id)
- * @method static paginate()
- */
 class Book extends Model
 {
     use HasFactory;

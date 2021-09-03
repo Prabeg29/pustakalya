@@ -14,6 +14,11 @@ interface EloquentRepositoryInterface
     public function create(array $payload): ?Model;
 
     /**
+     * @param array $payload
+     * @return Model|null
+     */
+    public function firstOrCreate(array $payload): ?Model;
+    /**
      * @param array $columns
      * @return mixed
      */
@@ -30,7 +35,7 @@ interface EloquentRepositoryInterface
      * @param array $payload
      * @return bool
      */
-    public function update(int $modelId, array $payload): bool;
+    public function update(int $modelId, array $payload): ?Model;
 
     /**
      * @param int $modelId

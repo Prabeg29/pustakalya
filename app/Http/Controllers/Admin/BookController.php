@@ -2,56 +2,54 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Book\StoreBookAction;
-use App\Actions\UpdateUserAction;
 use App\Http\Requests\BookRequest;
 use App\Http\Resources\BookResource;
-use App\Models\Author;
-use App\Models\Book;
-use App\Models\Genre;
+use App\Services\BookService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Routing\Controller;
 
 class BookController extends Controller
 {
-    public function __construct()
+    private $bookService;
+
+    public function __construct(BookService $bookService)
     {
-        request()->headers->set('Accept', 'application/json');
+        $this->bookService = $bookService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @param $request
      * @return AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index()
     {
-        return BookResource::collection(Book::paginate($request->limit));
+        $books = $this->bookService->getAllBook();
+        return BookResource::collection($books);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     * @return BookResource|Response
+     * @param BookRequest $request
+     * @return BookResource
      */
-    public function store(BookRequest $request, StoreBookAction $action)
+    public function store(BookRequest $request)
     {
-        $book = $action->handle($request);
+        $book = $this->bookService->addBook($request->all());
         return new BookResource($book);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Book $book
+     * @param $id
      * @return BookResource
      */
-    public function show(Book $book)
+    public function show($id)
     {
+        $book = $this->bookService->getBook($id);
         return new BookResource($book);
     }
 
@@ -59,13 +57,12 @@ class BookController extends Controller
      * Update the specified resource in storage.
      *
      * @param BookRequest $request
-     * @param UpdateUserAction $action
-     * @param Book $book
+     * @param $id
      * @return BookResource
      */
-    public function update(BookRequest $request, UpdateUserAction $action, Book $book)
+    public function update(BookRequest $request, $id)
     {
-        $book = $action->handle($request, $book);
+        $book = $this->bookService->updateBook($request->all(), $id);
         return new BookResource($book);
     }
 
@@ -75,9 +72,14 @@ class BookController extends Controller
      * @param  int  $id
      * @return JsonResponse
      */
-    public function destroy(Book $book)
+    public function destroy($id)
     {
-        $book->delete();
+        if(!$this->bookService->deleteBook($id)){
+            return response()->json([
+                "status" => "Failed",
+                "message" => "Something went wrong"
+            ], 500);
+        }
         return response()->json([
             "status" => "Success",
             "message" => "Book successfully deleted"

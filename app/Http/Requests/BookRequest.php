@@ -29,7 +29,21 @@ class BookRequest extends FormRequest
             'coverImage' => 'string|max:255',
             'authors' => 'required|string|max:255',
             'genres' => 'required|string|max:255',
-            'qty' => 'required|numeric'
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array
+     */
+    public function messages()
+    {
+        return [
+            'title.required' => 'Please enter book title',
+            'description.required' => 'Please enter description',
+            'authors.required' => 'Please enter at least one author',
+            'genres.required' => 'Please enter at least one genre',
         ];
     }
 }
