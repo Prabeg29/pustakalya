@@ -3,11 +3,8 @@
 use App\Http\Controllers\Admin\BookController as AdminBookController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-<<<<<<< HEAD
 use App\Http\Controllers\Auth\EmailVerificationController;
 use App\Http\Controllers\BookController;
-=======
->>>>>>> Refactor code file upload
 use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\UserBookController;
@@ -15,10 +12,6 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
-<<<<<<< HEAD
-=======
-use App\Http\Controllers\Admin\BookController as AdminBookController;
->>>>>>> Refactor code file upload
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +28,6 @@ Route::prefix('/v1')->group(function (){
     Route::post('/register', [RegisterController::class, 'register']);
     Route::post('/login', [LoginController::class, 'login']);
     Route::middleware('auth:sanctum')->group(function(){
-<<<<<<< HEAD
         Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
             ->name('verification.send');
         Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
@@ -44,14 +36,9 @@ Route::prefix('/v1')->group(function (){
         Route::post('/book-search', [SearchController::class, 'search']);
         Route::apiResource('books', BookController::class)->only(['index', 'show']);
         Route::apiResource('/admin/books', AdminBookController::class)->middleware('isAdmin');
-=======
-        Route::post('/file-upload', [FileUploadController::class, 'upload']);
-        Route::post('/book-search', [SearchController::class, 'search']);
->>>>>>> Refactor code file upload
         Route::apiResource('users', UserController::class);
         Route::apiResource('books', AdminBookController::class)
             ->middleware(IsAdmin::class);
-        Route::apiResource('users.books', UserBookController::class);
         Route::apiResource('books.reviews', BookReviewController::class);
     });
 });
