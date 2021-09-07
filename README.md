@@ -22,9 +22,9 @@ Please make sure to update tests as appropriate.
 ### API TASK 
 
 # Auth
-- [X] User Registration
-- [X] login via username and password (Sanctum Auth)
-- [] logout
+- [X] User Registration with email verification
+- [X] Login via username and password (Sanctum Auth)
+- [X] Logout
 
 # List books
 - [X] the book has a title with author, cover, and genre
