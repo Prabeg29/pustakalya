@@ -13,7 +13,7 @@ class BookRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->is_admin;
     }
 
     /**
@@ -25,10 +25,11 @@ class BookRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'description' => 'required|string',
             'coverImage' => 'string|max:255',
             'authors' => 'required|string|max:255',
             'genres' => 'required|string|max:255',
+            'isApproved' => 'boolean'
         ];
     }
 
@@ -41,9 +42,14 @@ class BookRequest extends FormRequest
     {
         return [
             'title.required' => 'Please enter book title',
+            'title.max' => 'Please enter less than 255 characters',
             'description.required' => 'Please enter description',
+            'coverImage.max' => 'Please enter less than 255 characters',
             'authors.required' => 'Please enter at least one author',
+            'authors.max' => 'Please enter less than 255 characters',
             'genres.required' => 'Please enter at least one genre',
+            'genres.max' => 'Please enter less than 255 characters',
+            'isApproved.boolean' => 'Value can be either true or false',
         ];
     }
 }

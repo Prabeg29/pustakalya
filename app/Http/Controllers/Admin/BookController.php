@@ -25,20 +25,20 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = $this->bookService->getAllBook();
-        return BookResource::collection($books);
+        return BookResource::collection($this->bookService->getAllBooksPaginated());
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param BookRequest $request
-     * @return BookResource
+     * @return JsonResponse|object
      */
     public function store(BookRequest $request)
     {
-        $book = $this->bookService->addBook($request->all());
-        return new BookResource($book);
+        return (new BookResource($this->bookService->addBook($request->all())))
+            ->response()
+            ->setStatusCode(201);
     }
 
     /**
@@ -49,8 +49,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $book = $this->bookService->getBook($id);
-        return new BookResource($book);
+        return new BookResource($this->bookService->getBook($id));
     }
 
     /**
@@ -62,8 +61,7 @@ class BookController extends Controller
      */
     public function update(BookRequest $request, $id)
     {
-        $book = $this->bookService->updateBook($request->all(), $id);
-        return new BookResource($book);
+        return new BookResource($this->bookService->updateBook($request->all(), $id));
     }
 
     /**
@@ -74,15 +72,11 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        if(!$this->bookService->deleteBook($id)){
+        if($this->bookService->deleteBook($id)){
             return response()->json([
                 "status" => "Failed",
                 "message" => "Something went wrong"
             ], 500);
         }
-        return response()->json([
-            "status" => "Success",
-            "message" => "Book successfully deleted"
-        ], 204);
     }
 }

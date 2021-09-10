@@ -4,27 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\BookResource;
 use App\Models\Book;
+use App\Services\BookService;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
+    private $bookService;
+
+    public function __construct(BookService $bookService)
+    {
+        $this->bookService = $bookService;
+    }
+
     public function search(Request $request)
     {
-        $search = $request->search;
-        $result = Book::with(['authors',  'genres'])
-            ->where('title', 'like', "%$search%")
-            ->orWhere(function($query) use ($search) {
-                $query->whereHas('authors', function($query) use ($search) {
-                    $query->where('name', 'like', "%$search%");
-                });
-            })
-            ->orWhere(function($query) use ($search){
-                $query->whereHas('genres', function($query) use ($search) {
-                    $query->where('name', 'like', "%$search%");
-                });
-            })
-            ->get();
-
-        return BookResource::collection($result);
+        return BookResource::collection($this->bookService->searchForApprovedBooks($request->search));
     }
 }

@@ -27,7 +27,7 @@ class UserProfileRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:App\Models\User,email',
             'username' => 'required|string|unique:App\Models\User,username|max:255',
-            'avatar' => 'image|max:1024',
+            //'avatar' => 'string|max:1024',
             'isAdmin' => 'boolean'
         ];
     }

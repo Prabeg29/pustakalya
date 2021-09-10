@@ -11,8 +11,11 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * Controller constructor.
+     */
     public function __construct()
     {
-        request()->headers->set('Accept', 'application/json');
+        request()->headers->set('accept', 'application/json');
     }
 }

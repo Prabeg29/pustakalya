@@ -41,6 +41,12 @@ abstract class BaseRepository implements EloquentRepositoryInterface
         return $this->model->with($relations)->get($columns);
     }
 
+    public function paginate($perPage = 10, array $columns = ['*'], array $relations = [])
+    {
+        return $this->model->with($relations)->paginate($perPage);
+
+    }
+
     /**
      * @inheritDoc
      */

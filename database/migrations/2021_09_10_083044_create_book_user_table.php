@@ -16,9 +16,13 @@ class CreateBookUserTable extends Migration
         Schema::create('book_user', function (Blueprint $table) {
             $table->id();
             $table->foreignId('book_id')
-                ->constrained();
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->foreignId('user_id')
-                ->constrained();
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }

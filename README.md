@@ -1,17 +1,15 @@
-# Foobar
-
 This is a digital library project
 
 # Author
 
- **By Prabeg Shakya**
+ **Prabeg Shakya**
 
 ## Installation
 Change .env file
 
 ```bash
 composer intall
-php aritsan migrate:fresh --seed
+php aritsan migrate:fresh
 php artisan serve
 ```
 
@@ -24,7 +22,7 @@ Please make sure to update tests as appropriate.
 # Auth
 - [X] User Registration with email verification
 - [X] Login via username and password (Sanctum Auth)
-- [X] Logout
+- [] Logout
 
 # List books
 - [X] the book has a title with author, cover, and genre
@@ -32,8 +30,9 @@ Please make sure to update tests as appropriate.
 - [X] paginate the results
 - [X] Search for a book by title/author/genre
 
-# List Individual Book
+# Individual Book
 - [X] must have description, user reviews and rating
+- CRUD for reviews using policies
 
 # Admin account
 - [X] CRUD operation for books with middleware
@@ -41,7 +40,10 @@ Please make sure to update tests as appropriate.
 
 # User Account
 - [X] Edit user profile
-- [X] Upload avatar
+- [] Upload avatar
 - [] Change the password
 - [X] Add book to profile
 - [X] View books added under ones profile 
+
+# Misc
+- [] API Documentation

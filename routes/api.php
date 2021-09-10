@@ -10,7 +10,6 @@ use App\Http\Controllers\BookReviewController;
 use App\Http\Controllers\UserBookController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
-use App\Http\Middleware\IsAdmin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,21 +23,33 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('/v1')->group(function (){
-    Route::post('/register', [RegisterController::class, 'register']);
-    Route::post('/login', [LoginController::class, 'login']);
-    Route::middleware('auth:sanctum')->group(function(){
-        Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
-            ->name('verification.send');
-        Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-            ->name('verification.verify');
-        Route::post('/file-upload', [FileUploadController::class, 'upload']);
-        Route::post('/book-search', [SearchController::class, 'search']);
-        Route::apiResource('books', BookController::class)->only(['index', 'show']);
-        Route::apiResource('/admin/books', AdminBookController::class)->middleware('isAdmin');
-        Route::apiResource('users', UserController::class);
-        Route::apiResource('books', AdminBookController::class)
-            ->middleware(IsAdmin::class);
-        Route::apiResource('books.reviews', BookReviewController::class);
+Route::prefix('v1')->group(function (){
+    Route::prefix('auth')->group(function(){
+        Route::post('register', [RegisterController::class, 'register']);
+        Route::post('login', [LoginController::class, 'login']);
     });
+    Route::middleware('auth:sanctum')->group(function(){
+        Route::prefix('auth')->group(function(){
+            Route::post('/email/verification-notification', [EmailVerificationController::class, 'resend'])
+                ->name('verification.send');
+            Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+                ->name('verification.verify');
+        });
+
+        Route::post('/file-upload', [FileUploadController::class, 'upload']);
+        Route::post('/books/search', [SearchController::class, 'search']);
+        Route::apiResource('admin/books', AdminBookController::class);
+        Route::apiResource('books', BookController::class)->only(['index', 'show']);
+        Route::apiResource('books.reviews', BookReviewController::class);
+        Route::apiResource('users', UserController::class);
+        Route::apiResource('users.books', UserBookController::class);
+    });
+});
+
+Route::fallback(function(){
+    return response()->json(
+        [
+            'message' => 'Page Not Found.'
+        ],
+        404);
 });

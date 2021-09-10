@@ -21,7 +21,8 @@ class BookResource extends JsonResource
             "coverImage" => $this->cover_image,
             "authors" => $this->commaSeparate($this->authors),
             "genres" => $this->commaSeparate($this->genres),
-            'reviews' => BookReviewResource::collection($this->reviews),
+            'reviews' => $this->when($request->book, BookReviewResource::collection($this->reviews)),
+            'isApproved' => $this->is_approved,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

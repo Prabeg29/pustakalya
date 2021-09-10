@@ -2,38 +2,54 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Review\StoreReviewAction;
-use App\Actions\UpdateUserAction;
-use App\Models\Book;
-use App\Models\Review;
-use Illuminate\Http\Request;
+use App\Http\Requests\BookReviewRequest;
+use App\Http\Resources\BookReviewResource;
+use App\Services\BookService;
+use App\Services\ReviewService;
+use Illuminate\Http\Response;
 
 class BookReviewController extends Controller
 {
+    private $bookService;
+    private $reviewService;
+
+    public function __construct(BookService $bookService, ReviewService $reviewService)
+    {
+        $this->bookService = $bookService;
+        $this->reviewService = $reviewService;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param Book $book
-     * @param StoreReviewAction $action
-     * @return void
+     * @param BookReviewRequest $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|object
      */
-    public function store(Request $request, Book $book, StoreReviewAction $action)
+    public function store(BookReviewRequest $request, $bookId)
     {
-        $book = $action->handle($request, $book);
+        $book = $this->bookService->getBook($bookId);
+        $this->authorize('update', $book);
+        $review = $this->reviewService->addReview($request->all(), $book);
+        return (new BookReviewResource($review))
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param BookReviewRequest $request
+     * @param $bookId
+     * @return BookReviewResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Book $book, Review $review, UpdateUserAction $action)
+    public function update(BookReviewRequest $request, $bookId, $reviewId)
     {
+        $review = $this->reviewService->getReview($reviewId);
         $this->authorize('update', $review);
-        $book = $action->handle($request, $book, $review);
+        $review = $this->reviewService->updateReview($request->all(), $bookId, $reviewId);
+        return (new BookReviewResource($review));
     }
 
     /**
@@ -42,10 +58,12 @@ class BookReviewController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Book $book, Review $review)
+    public function destroy($bookId, $reviewId)
     {
-        $this->authorize('update', $review);
-        $review->delete();
-        return response()->json(['message' => 'Review Deleted'], 204);
+        $review = $this->reviewService->getReview($reviewId);
+        $this->authorize('delete', $review);
+        if($this->reviewService->deleteBookReview($reviewId)){
+            return response()->json([], 204);
+        }
     }
 }

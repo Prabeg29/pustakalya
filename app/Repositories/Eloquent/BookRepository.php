@@ -12,4 +12,9 @@ class BookRepository extends BaseRepository implements BookRepositoryInterface
     {
         parent::__construct($model);
     }
+
+    public function allApprovedBooksPaginated($field, $value, $columns = ['*'])
+    {
+        return $this->model->where($field, $value)->paginate(15);
+    }
 }

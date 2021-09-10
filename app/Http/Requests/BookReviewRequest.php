@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FileUploadRequest extends FormRequest
+class BookReviewRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,8 @@ class FileUploadRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'file' => 'required|mimes:jpg,jpeg,png,pdf|max:10240'
+            'review' => 'required|string',
+            'rating' => 'required|numeric|between:0,5'
         ];
     }
 
@@ -37,11 +37,11 @@ class FileUploadRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Please enter filename',
-            'name.max' => 'Please enter less than 255 characters',
-            'file.required' => 'Please select a file',
-            'file.image' => 'File must be an image',
-            'file.max' => 'Please select a file with max size of 1 MB',
+            'review.required' => 'Please enter review',
+            'rating.required' => 'Please enter rating',
+            'rating.numeric' => 'Please enter numeric value',
+            'rating.between' => 'Rating is between 0 and 5',
         ];
+
     }
 }

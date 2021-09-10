@@ -17,7 +17,7 @@ class Book extends Model
         'title',
         'description',
         'cover_image',
-        'qty'
+        'is_approved'
     ];
 
     /**
@@ -44,10 +44,14 @@ class Book extends Model
         return $this->belongsToMany(User::class);
     }
 
+    /**
+     * Get reviews for the book.
+     */
     public function reviews()
     {
         return $this->hasMany(Review::class);
     }
+
 
     /**
      * @param $collection

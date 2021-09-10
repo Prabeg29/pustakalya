@@ -17,7 +17,7 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->id === 1;
+        return $user->is_admin;
     }
 
     /**
@@ -29,7 +29,7 @@ class UserPolicy
      */
     public function view(User $user, User $model)
     {
-        return ($user->id === $model->id) || ($user->id === 1);
+        return ($user->id === $model->id) || ($user->is_admin);
     }
 
     /**
@@ -52,7 +52,7 @@ class UserPolicy
      */
     public function update(User $user, User $model)
     {
-        return ($user->id === $model->id) || ($user->id === 1);
+        return ($user->id === $model->id) || ($user->is_admin);
     }
 
     /**
@@ -64,7 +64,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return $user->id === $model->id || $user->id === 1;
+        return $user->id === $model->id || $user->is_admin;
     }
 
     /**

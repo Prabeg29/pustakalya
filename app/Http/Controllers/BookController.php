@@ -21,10 +21,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = $this->bookService->getAllBook();
-        return BookResource::collection($books);
+        return BookResource::collection($this->bookService->getAllApprovedBooksPaginated());
     }
-
 
     /**
      * Display the specified resource.
@@ -35,7 +33,7 @@ class BookController extends Controller
     public function show($id)
     {
         $book = $this->bookService->getBook($id);
+        $this->authorize('view', $book);
         return new BookResource($book);
     }
-
 }

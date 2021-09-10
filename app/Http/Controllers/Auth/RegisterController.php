@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\UserNotRegisteredException;
 use App\Services\UserService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserRegistrationRequest;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
 
 class RegisterController extends Controller
 {
@@ -18,17 +19,24 @@ class RegisterController extends Controller
     }
 
     /**
-     * @param UserRegisterRequest $request
+     * @param UserRegistrationRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(UserRegisterRequest $request)
+    public function register(UserRegistrationRequest $request)
     {
-        $data = $this->userService->registerUser($request->except('confirmPassword'));
-        event(new Registered($data["user"]));
+        try{
+            $registeredUser = $this->userService->registerUser($request->except('confirmPassword'));
+        }
+        catch (UserNotRegisteredException $exception){
+            return response()->json([
+                "message" => $exception->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        event(new Registered($registeredUser["user"]));
         return response()->json([
-            "status" => "Success",
-            "user" => $data["user"],
-            "token" => $data["token"]
-        ], 201);
+            "status" => "User Registration Successful",
+            "user" => $registeredUser["user"],
+            "token" => $registeredUser["token"]
+        ], Response::HTTP_CREATED);
     }
 }

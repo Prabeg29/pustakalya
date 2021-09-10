@@ -2,11 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Review;
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
-class ReviewPolicy
+class BookPolicy
 {
     use HandlesAuthorization;
 
@@ -18,19 +19,21 @@ class ReviewPolicy
      */
     public function viewAny(User $user)
     {
-        return ($user->id === $model->id) || ($user->id === 1);
+        //
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Review $review)
+    public function view(User $user, Book $book)
     {
-        //
+        return ($user->is_admin) || ($book->is_approved)?
+            Response::allow() :
+            Response::deny('You cannot view this book.');
     }
 
     /**
@@ -48,34 +51,36 @@ class ReviewPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Review $review)
+    public function update(User $user, Book $book)
     {
-        return $user->id === $review->user_id;
+        return ($user->is_admin) || ($book->is_approved)?
+            Response::allow() :
+            Response::deny('You cannot review this book.');
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Review $review)
+    public function delete(User $user, Book $book)
     {
-        return $user->id === $review->user_id;
+        //
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, Review $review)
+    public function restore(User $user, Book $book)
     {
         //
     }
@@ -84,10 +89,10 @@ class ReviewPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Review  $review
+     * @param  \App\Models\Book  $book
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, Review $review)
+    public function forceDelete(User $user, Book $book)
     {
         //
     }

@@ -25,6 +25,14 @@ interface EloquentRepositoryInterface
     public function all(array $columns = ['*'], array $relations = []): Collection;
 
     /**
+     * @param int $perPage
+     * @param array $columns
+     * @param array $relations
+     * @return mixed
+     */
+    public function paginate($perPage = 10, array $columns = ['*'], array $relations = []);
+
+    /**
      * @param int $modelId
      * @return Model|null
      */
